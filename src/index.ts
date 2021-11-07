@@ -1,6 +1,6 @@
 import {get as getApp} from './app.js';
 
-const PORT: number = Number(process.env.PORT || 3000);
+const PORT: number = Number(process.env.PORT || 3010);
 
 const app = getApp({
     // secret: String(process.env.SECRET || "ThisIsNotSoSecretChangeIt2"),

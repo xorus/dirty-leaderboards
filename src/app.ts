@@ -1,9 +1,6 @@
 import express from 'express';
 import {Low, JSONFile} from 'lowdb';
-import lodash from 'lodash';
 import bodyParser from "body-parser";
-
-const {parseInt} = lodash;
 
 export interface Settings {
     // secret: string,
