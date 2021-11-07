@@ -1,3 +1,4 @@
-var/
-vendor/
-.idea/
+.idea
+node_modules
+build
+yarn.lock

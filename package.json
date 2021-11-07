@@ -1,0 +1,25 @@
+{
+  "name": "section-lock",
+  "version": "1.0.0",
+  "exports": "./src/index.js",
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@types/body-parser": "^1.19.1",
+    "@types/express": "^4.17.2",
+    "@types/lodash": "^4.14.176",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "lodash": "^4.17.21",
+    "lowdb": "^3.0.0",
+    "typescript": "^4.3.5"
+  },
+  "scripts": {
+    "start": "node build/index.js",
+    "build": "tsc",
+    "gobrrr": "npm run build && npm run start"
+  },
+  "type": "module"
+}

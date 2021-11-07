@@ -1,18 +1,20 @@
-FROM php:8.0-apache
-COPY --from=composer:2.1 /usr/bin/composer /usr/local/bin/composer
+FROM node:16-alpine3.14 as builder
+WORKDIR /usr/src/app
 
-RUN apt-get update && apt-get install -y git unzip
+COPY package.json /usr/src/app/package.json
+COPY package-lock.json /usr/src/app/package-lock.json
+COPY tsconfig.json /usr/src/app/tsconfig.json
+COPY src /usr/src/app/src
 
+RUN npm install --quiet && npm run build
 
-COPY . /var/www/html/
-WORKDIR /var/www/html/
-RUN composer install
+FROM node:16-alpine3.14 as runtime
+WORKDIR /usr/src/app
 
-RUN mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
-# set default timezone
-RUN sed -ri -e 's!;date.timezone =!date.timezone = "Europe/Paris"!g' /usr/local/etc/php/php.ini
-RUN a2enmod actions rewrite
+COPY --from=builder /usr/src/app/build /usr/src/app/build
+COPY --from=builder /usr/src/app/package.json /usr/src/app/package.json
+COPY --from=builder /usr/src/app/package-lock.json /usr/src/app/package-lock.json
+RUN npm install --quiet --production
 
-
-
-#CMD [ "php", "./your-script.php" ]
+EXPOSE 4000
+CMD [ "node", "./build/index.js" ]
