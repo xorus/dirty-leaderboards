@@ -1,6 +1,7 @@
 import express from 'express';
 import {Low, JSONFile} from 'lowdb';
 import bodyParser from "body-parser";
+import cors from "cors";
 
 export interface Settings {
     // secret: string,
@@ -10,7 +11,8 @@ export interface Settings {
 
 interface Score {
     name: string,
-    score: number
+    score: number,
+    date?: string
 }
 
 interface DbContents {
@@ -34,6 +36,7 @@ export function get(settings: Settings) {
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(bodyParser.json());
     app.use(bodyParser.raw());
+    app.use(cors());
 
     router.get('/leaderboard', async (req, res) => {
         await db.read();
@@ -42,13 +45,23 @@ export function get(settings: Settings) {
             throw new Error('error while loading data');
         }
 
+        let showDates = typeof req.query.dates !== "undefined";
         const count = parseInt((req.query.count ?? DEFAULT_LIMIT) as string);
         const scores = db.data.leaderboard.sort((a, b) => {
             return b.score > a.score ? 1 : -1;
         }).slice(0, count);
 
-        res.set('Cache-Control', 'private, max-age=5')
-        res.send(scores);
+        res.set('Cache-Control', 'private, max-age=5');
+        if (showDates) {
+            res.send(scores);
+        } else {
+            res.send(scores.map(score => {
+                return {
+                    name: score.name,
+                    score: score.score
+                }
+            }));
+        }
     });
 
     router.post('/leaderboard', async (req, res) => {
@@ -75,11 +88,12 @@ export function get(settings: Settings) {
 
             db.data.leaderboard.push({
                 name: name.substr(0, 3),
-                score: parseInt(score)
+                score: parseInt(score),
+                date: new Date().toISOString()
             })
             const scores = db.data.leaderboard.sort((a, b) => {
                 return b.score > a.score ? 1 : -1;
-            }).slice(0, count);
+            });
             db.data.leaderboard = scores;
             await db.write();
             res.send(scores);
