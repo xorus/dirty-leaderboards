@@ -1,0 +1,7 @@
+services:
+  leaderboard:
+    build: .
+    volumes:
+      - "./data:/app/data:rw"
+    ports:
+      - "9768:80"
