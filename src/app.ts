@@ -37,6 +37,7 @@ export function get(settings: Settings) {
     app.use(bodyParser.json());
     app.use(bodyParser.raw());
     app.use(cors());
+    app.use('/', express.static('./build/public'));
 
     router.get('/leaderboard', async (req, res) => {
         await db.read();

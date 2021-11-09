@@ -2,9 +2,9 @@ services:
   leaderboard:
     build: .
     volumes:
-      - "./db.json:/usr/src/app/db.json:rw"
+      - "./data:/usr/src/app/data:rw"
     ports:
       - "9768:80"
     environment:
       - PORT=80
-      - DB_FILE=/usr/src/app/db.json
+      - DB_FILE=/usr/src/app/data/db.json

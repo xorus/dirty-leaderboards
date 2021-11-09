@@ -4,6 +4,7 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app/package.json
 COPY package-lock.json /usr/src/app/package-lock.json
 COPY tsconfig.json /usr/src/app/tsconfig.json
+COPY public /usr/src/app/public
 COPY src /usr/src/app/src
 
 RUN npm install --quiet && npm run build

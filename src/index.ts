@@ -5,7 +5,7 @@ const PORT: number = Number(process.env.PORT || 3000);
 const app = getApp({
     // secret: String(process.env.SECRET || "ThisIsNotSoSecretChangeIt2"),
     // appHost: String(process.env.APP_HOST || "app")
-    dbFile: String(process.env.DB_FILE || "db.json")
+    dbFile: String(process.env.DB_FILE || "data/db.json")
 });
 const server = app.listen(PORT, () => {
     console.info(`Listening port on ${PORT}.`);
